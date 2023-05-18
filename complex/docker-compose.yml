@@ -1,0 +1,35 @@
+version: "3"
+services:
+  client:
+    image: "nikolamdev/multi-client"
+    mem_limit: 128m
+    hostname: client
+
+  server:
+    image: "nikolamdev/multi-server"
+    mem_limit: 128m
+    hostname: api
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
+
+  worker:
+    image: "nikolamdev/multi-worker"
+    mem_limit: 128m
+    hostname: worker
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+
+  nginx:
+    restart: always
+    image: "nikolamdev/multi-nginx"
+    mem_limit: 128m
+    hostname: nginx
+    ports:
+      - "80:80"
